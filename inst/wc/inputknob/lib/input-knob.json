@@ -1,0 +1,33 @@
+{
+  "tagName": "input-knob",
+
+  "version": "1.0.0",
+
+  "attributes": [
+    "value",
+    "scale",
+    "min",
+    "max"
+  ],
+
+  "events": [
+    "knob-move-change",
+    "knob-move-start",
+    "knob-move-end"
+  ],
+
+  "methods": [
+    "rotateLeft",
+    "rotateRight"
+  ],
+
+  "cssVariables": [
+    "--knob-size"
+  ],
+
+  "defaultSlot": true,
+
+  "slots": [
+    "back-side"
+  ]
+}

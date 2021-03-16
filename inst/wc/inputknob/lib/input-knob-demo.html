@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <script src="input-knob.js" type="module"></script>
+    <style>
+      input-knob { --knob-size: 10rem; }
+    </style>
+  </head>
+
+  <body>
+    <input-knob
+      id="testknob"
+      value="50"
+      scale="10"
+      min="0"
+      max="100">^<span slot="back-side">...</span></input-knob>
+
+    <div>Value: <span id="val"></span></div>
+    <button onclick="document.getElementById('testknob').rotateRight(0.25)">Turn right 1/4</button>
+
+    <script>
+      document.addEventListener('knob-move-change', function(e) {
+        document.getElementById('val').innerHTML = document.getElementById('testknob').value;
+      });
+    </script>
+  </body>
+</html>

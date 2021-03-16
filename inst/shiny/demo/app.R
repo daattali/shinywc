@@ -1,4 +1,5 @@
 library(shiny)
+library(inputknob)
 
 ui <- fluidPage(
   selectInput("attr", "Set attribute", c("value", "scale", "max", "min")),

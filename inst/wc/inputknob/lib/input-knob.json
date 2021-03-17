@@ -1,33 +1,48 @@
 {
-  "tagName": "input-knob",
-
-  "version": "1.0.0",
-
-  "attributes": [
-    "value",
-    "scale",
-    "min",
-    "max"
-  ],
-
-  "events": [
-    "knob-move-change",
-    "knob-move-start",
-    "knob-move-end"
-  ],
-
-  "methods": [
-    "rotateLeft",
-    "rotateRight"
-  ],
-
-  "cssVariables": [
-    "--knob-size"
-  ],
-
-  "defaultSlot": true,
-
-  "slots": [
-    "back-side"
+  "version": "experimental",
+  "tags": [
+    {
+      "name": "input-knob",
+      "attributes": [
+        {
+          "name": "value"
+        },
+        {
+          "name": "scale"
+        },
+        {
+          "name": "min"
+        },
+        {
+          "name": "max"
+        }
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "attribute": "value"
+        },
+        {
+          "name": "scale",
+          "attribute": "scale"
+        },
+        {
+          "name": "min",
+          "attribute": "min"
+        },
+        {
+          "name": "max",
+          "attribute": "max"
+        }
+      ],
+      "events": [
+        {
+          "name": "knob-move-change"
+        },
+        {
+          "name": "knob-move-end"
+        }
+      ]
+    }
   ]
 }

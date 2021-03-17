@@ -3,6 +3,7 @@
   "tags": [
     {
       "name": "input-knob",
+      "version": "0.1.0",
       "attributes": [
         {
           "name": "value"
@@ -40,7 +41,28 @@
           "name": "knob-move-change"
         },
         {
+          "name": "knob-move-start"
+        },
+        {
           "name": "knob-move-end"
+        }
+      ],
+      "slots": [
+        {
+          "name": "back-side"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--knob-size"
+        }
+      ],
+      "methods": [
+        {
+          "name": "rotateLeft"
+        },
+        {
+          "name": "rotateRight"
         }
       ]
     }

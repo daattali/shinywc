@@ -10,16 +10,19 @@ inputknob(
   scale = NULL,
   min = NULL,
   max = NULL,
-  ...,
+  slot = NULL,
   `slot-back-side` = NULL,
-  `css-knob-size` = NULL
+  `css-knob-size` = NULL,
+  ...
 )
 }
 \arguments{
 \item{id}{ID for the component. If not provided, an ID will be automatically
 generated.}
 
-\item{...}{Content to place in the default (unnamed) slot.}
+\item{slot}{Content to place in the default (unnamed) slot.}
+
+\item{...}{Any additional HTML attributes to add to the element tag.}
 }
 \description{
 Binding to the \verb{<input-knob>} web component version 1.0.0.

@@ -7,7 +7,7 @@ ui <- fluidPage(
   inputknob(
     id = "testknob",
     value = 50, scale = 10, min = 0, max = 100,
-    "^",
+    slot = "^",
     `slot-back-side` = tags$span('..'),
     `css-knob-size` = "150px"
   ),

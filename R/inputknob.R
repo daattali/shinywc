@@ -4,7 +4,8 @@
 #'
 #' @param id ID for the component. If not provided, an ID will be automatically
 #' generated.
-#' @param ... Content to place in the default (unnamed) slot.
+#' @param slot Content to place in the default (unnamed) slot.
+#' @param ... Any additional HTML attributes to add to the element tag.
 #' @export
 inputknob <- function(
   id = NULL,
@@ -12,10 +13,18 @@ inputknob <- function(
   scale = NULL,
   min = NULL,
   max = NULL,
-  ...,
+  slot = NULL,
   `slot-back-side` = NULL,
-  `css-knob-size` = NULL
+  `css-knob-size` = NULL,
+  ...
   ) {
+
+  params <- eval(substitute(alist(...)))
+  if (length(params) > 0) {
+    if (is.null(names(params)) || any(names(params) == "")) {
+      stop("inputknob: additional parameters must be named attributes")
+    }
+  }
 
   if (is.null(id)) {
     id <- paste0('input-knob-', sample(1e9, 1))
@@ -44,9 +53,10 @@ inputknob <- function(
         scale = scale,
         min = min,
         max = max,
-        ...,
+        slot,
         `slot-back-side`,
-        style = style
+        style = style,
+        ...
       )),
       deps
     )

@@ -96,12 +96,12 @@ class InputKnob extends HTMLElement {
 
   rotateRight(turns=1) {
     this.value = Math.min(parseFloat(this.value) + parseFloat(this.scale)*turns, parseFloat(this.max));
-    const evt = new Event('knob-move-change', { bubbles: true });
+    const evt = new CustomEvent('knob-move-change', { bubbles: true , detail: this.value });
     this.dispatchEvent(evt);
   }
   rotateLeft(turns=1) {
     this.value = Math.max(parseFloat(this.value) - parseFloat(this.scale)*turns, parseFloat(this.min));
-    const evt = new Event('knob-move-change', { bubbles: true });
+    const evt = new CustomEvent('knob-move-change', { bubbles: true , detail: this.value });
     this.dispatchEvent(evt);
   }
 
@@ -240,7 +240,7 @@ class InputKnob extends HTMLElement {
       this.value = this.max;
     }
 
-    const evt = new Event('knob-move-change', { bubbles: true });
+    const evt = new CustomEvent('knob-move-change', { bubbles: true , detail: this.value });
     this.dispatchEvent(evt);
   }
 

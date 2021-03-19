@@ -2,28 +2,48 @@ library(shiny)
 library(inputknob)
 
 ui <- fluidPage(
-  selectInput("attr", "Set attribute", c("value", "scale", "max", "min")),
-  numericInput("num", "value", 70),
-  actionButton("go", "go"),
-  actionButton("rotateleft", "rotateleft"),
-  actionButton("get_value", "get value"),
+  h1("<input-knob> web component Shiny demo"),
+
   inputknob(
     id = "testknob",
     value = 50, scale = 10, min = 0, max = 100,
     "^",
     `slot-back-side` = tags$span('..'),
-    `css-knob-size` = "100px"
+    `css-knob-size` = "150px"
   ),
-  div("Value:", textOutput("value"))
+
+  "'knob-move-end' event is triggered:",
+  textOutput("value", inline = TRUE),
+
+  fluidRow(
+    column(
+      3,
+      h3("Set attribute"),
+      selectInput("attr", "Attribute", c("value", "scale", "max", "min")),
+      numericInput("num", "value", 70),
+      actionButton("go", "Set")
+    ),
+    column(
+      3,
+      h3("Rotate right"),
+      numericInput("rotatenum", "How many turns?", 0.1),
+      actionButton("dorotate", "Rotate")
+    ),
+    column(
+      3,
+      h3("Get attribute"),
+      actionButton("get_value", "Show value attribute"),
+    )
+  )
 )
 
 server <- function(input, output, session) {
   output$value <- renderText({
-    input$testknob_end
+    input$`testknob_knob-move-end`
   })
 
-  observeEvent(input$rotateleft, {
-    inputknob_call("testknob", "rotateLeft", 1)
+  observeEvent(input$dorotate, {
+    inputknob_call("testknob", "rotateRight", input$rotatenum)
   })
 
   observeEvent(input$go, {

@@ -1,6 +1,6 @@
 // Send web component events to Shiny
 $(document).on('knob-move-change', 'input-knob', function(evt) {
-  const id = evt.target.id + '_change';
+  const id = evt.target.id + '_knob-move-change';
   let val = evt.detail;
   if (typeof(val) === "undefined") {
     val = true;
@@ -9,7 +9,7 @@ $(document).on('knob-move-change', 'input-knob', function(evt) {
 });
 
 $(document).on('knob-move-start', 'input-knob', function(evt) {
-  const id = evt.target.id + '_start';
+  const id = evt.target.id + '_knob-move-start';
   let val = evt.detail;
   if (typeof(val) === "undefined") {
     val = true;
@@ -18,7 +18,7 @@ $(document).on('knob-move-start', 'input-knob', function(evt) {
 });
 
 $(document).on('knob-move-end', 'input-knob', function(evt) {
-  const id = evt.target.id + '_end';
+  const id = evt.target.id + '_knob-move-end';
   let val = evt.detail;
   if (typeof(val) === "undefined") {
     val = true;

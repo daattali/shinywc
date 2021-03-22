@@ -65,52 +65,100 @@ inputknob <- function(
 }
 
 #' @export
-inputknob_set_attr <- function(id, attr, value) {
-  if (!attr %in% POSSIBLE_ATTRS) {
-    stop(attr, "is not a supported attribute to set")
-  }
-  session <- shiny::getDefaultReactiveDomain()
-  session$sendCustomMessage('input-knob-attr', list(
-    id = id,
-    attr = attr,
-    value = value
-  ))
-}
+InputKnob <- R6::R6Class(
+  "InputKnob",
 
-#' Retrieve the value of an attribute from the component
-#'
-#' @param cb Callback function that gets called when the value is retrieved.
-#' The function has has one argument which holds the value of the attribute.
-#' @export
-inputknob_get_attr <- function(id, attr, cb) {
-  if (!attr %in% POSSIBLE_ATTRS) {
-    stop(attr, "is not a supported attribute to set")
-  }
-  session <- shiny::getDefaultReactiveDomain()
-  cbid <- paste0("__inputknob-", sample(1e9, 1))
-  session$sendCustomMessage('input-knob-get', list(
-    id = id,
-    attr = "value",
-    cbid = cbid
-  ))
-  shiny::observeEvent(session$input[[cbid]], once = TRUE, {
-    cb(session$input[[cbid]])
-  })
-}
+  private = list(
+    .id = NULL,
+    .session = NULL,
 
+    set_attr = function(attr, value) {
+      private$.session$sendCustomMessage('input-knob-attr-set', list(
+        id = private$.id,
+        attr = attr,
+        value = value
+      ))
+    },
 
+    get_attr = function(attr, cb) {
+      cbid <- paste0("__inputknob-", attr, "-", sample(1e9, 1))
+      private$.session$sendCustomMessage('input-knob-attr-get', list(
+        id = private$.id,
+        attr = attr,
+        cbid = cbid
+      ))
+      shiny::observeEvent(private$.session$input[[cbid]], once = TRUE, {
+        cb(private$.session$input[[cbid]])
+      })
+    },
 
-#' Call a method on the component
-#' @export
-inputknob_call <- function(id, method, args = list()) {
-  if (!method %in% POSSIBLE_METHODS) {
-    stop(method, "is not a supported method to call")
-  }
+    call_method = function(method, args = list()) {
+      private$.session$sendCustomMessage('input-knob-call', list(
+        id = private$.id,
+        method = method,
+        args = args
+      ))
+    }
+  ),
 
-  session <- shiny::getDefaultReactiveDomain()
-  session$sendCustomMessage('input-knob-call', list(
-    id = id,
-    method = method,
-    args = args
-  ))
-}
+  public = list(
+
+    initialize = function(id, session = shiny::getDefaultReactiveDomain()) {
+      if (is.null(session)) {
+        stop("InputKnob can only be initialized in a Shiny environment")
+      }
+      private$.session <- session
+      private$.id <-id
+    },
+
+    id = function() {
+      private$.id
+    },
+
+    event_knob_move_change = function() {
+      private$.session$input[[paste0(private$.id, "_knob-move-change")]]
+    },
+    event_knob_move_start = function() {
+      private$.session$input[[paste0(private$.id, "_knob-move-start")]]
+    },
+    event_knob_move_end = function() {
+      private$.session$input[[paste0(private$.id, "_knob-move-end")]]
+    },
+
+    get_value = function(cb) {
+      private$get_attr("value", cb)
+    },
+    set_value= function(value) {
+      private$set_attr("value", value)
+    },
+    get_scale = function(cb) {
+      private$get_attr("scale", cb)
+    },
+    set_scale = function(value) {
+      private$set_attr("scale", value)
+    },
+    get_min = function(cb) {
+      private$get_attr("min", cb)
+    },
+    set_min = function(value) {
+      private$set_attr("min", value)
+    },
+    get_max = function(cb) {
+      private$get_attr("max", cb)
+    },
+    set_max = function(value) {
+      private$set_attr("max", value)
+    },
+
+    # TODO add get/set for properties as well (not only attributes)
+
+    call_rotateLeft = function(args) {
+      private$call_method("rotateLeft", args)
+    },
+    call_rotateRight = function(args) {
+      private$call_method("rotateRight", args)
+    }
+
+  )
+
+)

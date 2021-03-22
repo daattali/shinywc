@@ -27,11 +27,19 @@ $(document).on('knob-move-end', 'input-knob', function(evt) {
 });
 
 
-Shiny.addCustomMessageHandler('input-knob-attr', function(message) {
+Shiny.addCustomMessageHandler('input-knob-attr-set', function(message) {
   const id = message.id;
   const param = message.attr;
   const val = message.value;
   document.getElementById(id)[[param]] = val;
+});
+
+Shiny.addCustomMessageHandler('input-knob-attr-get', function(message) {
+  const id = message.id;
+  const param = message.attr;
+  const cbid = message.cbid;
+  const val = document.getElementById(id)[[param]];
+  Shiny.setInputValue(cbid, val, { priority: "event" });
 });
 
 Shiny.addCustomMessageHandler('input-knob-call', function(message) {
@@ -39,12 +47,4 @@ Shiny.addCustomMessageHandler('input-knob-call', function(message) {
   const method = message.method;
   const args = message.args;
   document.getElementById(id)[[method]](args);
-});
-
-Shiny.addCustomMessageHandler('input-knob-get', function(message) {
-  const id = message.id;
-  const param = message.attr;
-  const cbid = message.cbid;
-  const val = document.getElementById(id)[[param]];
-  Shiny.setInputValue(cbid, val, { priority: "event" });
 });

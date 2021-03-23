@@ -70,6 +70,7 @@ InputKnob <- R6::R6Class(
 
   private = list(
     .id = NULL,
+    .id_noNS = NULL,
     .session = NULL,
 
     set_attr = function(attr, value) {
@@ -81,14 +82,15 @@ InputKnob <- R6::R6Class(
     },
 
     get_attr = function(attr, cb) {
-      cbid <- paste0("__inputknob-", attr, "-", sample(1e9, 1))
+      cbid_noNS <- paste0("__inputknob-", attr, "-", sample(1e9, 1))
+      cbid <- private$.session$ns(cbid_noNS)
       private$.session$sendCustomMessage('input-knob-attr-get', list(
         id = private$.id,
         attr = attr,
         cbid = cbid
       ))
-      shiny::observeEvent(private$.session$input[[cbid]], once = TRUE, {
-        cb(private$.session$input[[cbid]])
+      shiny::observeEvent(private$.session$input[[cbid_noNS]], once = TRUE, {
+        cb(private$.session$input[[cbid_noNS]])
       })
     },
 
@@ -108,21 +110,22 @@ InputKnob <- R6::R6Class(
         stop("InputKnob can only be initialized in a Shiny environment")
       }
       private$.session <- session
-      private$.id <-id
+      private$.id_noNS <- id
+      private$.id <- private$.session$ns(private$.id_noNS)
     },
 
     id = function() {
-      private$.id
+      private$.id_noNS
     },
 
     event_knob_move_change = function() {
-      private$.session$input[[paste0(private$.id, "_knob-move-change")]]
+      private$.session$input[[paste0(private$.id_noNS, "_knob-move-change")]]
     },
     event_knob_move_start = function() {
-      private$.session$input[[paste0(private$.id, "_knob-move-start")]]
+      private$.session$input[[paste0(private$.id_noNS, "_knob-move-start")]]
     },
     event_knob_move_end = function() {
-      private$.session$input[[paste0(private$.id, "_knob-move-end")]]
+      private$.session$input[[paste0(private$.id_noNS, "_knob-move-end")]]
     },
 
     get_value = function(cb) {

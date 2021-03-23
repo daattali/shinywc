@@ -1,49 +1,50 @@
 library(shiny)
 library(inputknob)
 
-ui <- fluidPage(
-  h1("<input-knob> web component Shiny demo"),
+test_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    inputknob(
+      id = ns("testknob"),
+      value = 50, scale = 10, min = 0, max = 100,
+      slot = "^",
+      `slot-back-side` = tags$span('..'),
+      `css-knob-size` = "150px"
+    ),
 
-  inputknob(
-    id = "testknob",
-    value = 50, scale = 10, min = 0, max = 100,
-    slot = "^",
-    `slot-back-side` = tags$span('..'),
-    `css-knob-size` = "150px"
-  ),
-
-  fluidRow(
-    column(
-      3,
-      h3("Set attribute"),
-      selectInput("attr", "Attribute", c("value", "scale", "max", "min")),
-      numericInput("num", "value", 70),
-      actionButton("set", "Set")
-    ),
-    column(
-      3,
-      h3("Get attribute"),
-      selectInput("attr_get", "Attribute", c("value", "scale", "max", "min")),
-      actionButton("get", "Show attribute"),
-    ),
-    column(
-      3,
-      h3("Call methods"),
-      selectInput("method", "Method", c("rotateRight", "rotateLeft")),
-      numericInput("rotatenum", "How many turns?", 0.1),
-      actionButton("call", "Go")
-    ),
-    column(
-      3,
-      h3("Events"),
-      div("knob-move-change:", textOutput("event_change", inline = TRUE)),
-      div("knob-move-start:", textOutput("event_start", inline = TRUE)),
-      div("knob-move-end:", textOutput("event_end", inline = TRUE))
+    fluidRow(
+      column(
+        3,
+        h3("Set attribute"),
+        selectInput(ns("attr"), "Attribute", c("value", "scale", "max", "min")),
+        numericInput(ns("num"), "value", 70),
+        actionButton(ns("set"), "Set")
+      ),
+      column(
+        3,
+        h3("Get attribute"),
+        selectInput(ns("attr_get"), "Attribute", c("value", "scale", "max", "min")),
+        actionButton(ns("get"), "Show attribute"),
+      ),
+      column(
+        3,
+        h3("Call methods"),
+        selectInput(ns("method"), "Method", c("rotateRight", "rotateLeft")),
+        numericInput(ns("rotatenum"), "How many turns?", 0.1),
+        actionButton(ns("call"), "Go")
+      ),
+      column(
+        3,
+        h3("Events"),
+        div("knob-move-change:", textOutput(ns("event_change"), inline = TRUE)),
+        div("knob-move-start:", textOutput(ns("event_start"), inline = TRUE)),
+        div("knob-move-end:", textOutput(ns("event_end"), inline = TRUE))
+      )
     )
   )
-)
+}
 
-server <- function(input, output, session) {
+test_server <- function(input, output, session) {
   knob <- InputKnob$new("testknob")
 
   observeEvent(input$set, {
@@ -73,6 +74,15 @@ server <- function(input, output, session) {
     req(knob$event_knob_move_end())
     paste(Sys.time(), knob$event_knob_move_end())
   })
+}
+
+ui <- fluidPage(
+  h1("<input-knob> web component Shiny demo"),
+  test_ui("test")
+)
+
+server <- function(input, output, session) {
+  callModule(test_server, "test")
 }
 
 shinyApp(ui, server)

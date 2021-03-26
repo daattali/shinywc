@@ -3,8 +3,4 @@
 export(InputKnob)
 export(html_dependency_webcomponentsjs)
 export(inputknob)
-export(inputknobOutput)
 export(inputknob_dependencies)
-export(inputknob_nowork)
-export(renderInputknob)
-import(htmlwidgets)

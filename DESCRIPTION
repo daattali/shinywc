@@ -10,7 +10,6 @@ Depends:
     R (>= 3.1.0)
 Imports:
     htmltools (>= 0.2.6),
-    htmlwidgets (>= 0.6),
     shiny
 License: MIT + file LICENSE
 Encoding: UTF-8

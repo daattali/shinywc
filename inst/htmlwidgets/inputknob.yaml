@@ -1,8 +1,0 @@
-# dependencies:
-#  - name: input-knob
-#    version: 1.0.0
-#    src: htmlwidgets
-#    script:
-#     - src: input-knob.js
-#       type: module
-#    stylesheet: input-knob.css

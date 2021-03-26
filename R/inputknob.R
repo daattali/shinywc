@@ -47,7 +47,7 @@ inputknob <- function(
 
   component_tag <-
     htmltools::attachDependencies(
-      htmltools::tag('input-knob', varArgs = list(
+      htmltools::tag('input-knob', .noWS = c("after-begin", "before-end"), varArgs = list(
         id = id,
         value = value,
         scale = scale,

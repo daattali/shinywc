@@ -45,23 +45,22 @@ inputknob <- function(
     style <- paste0("--", "knob-size", ":", `css-knob-size`, ";")
   }
 
-  component_tag <-
-    htmltools::attachDependencies(
-      htmltools::tag('input-knob', .noWS = c("after-begin", "before-end"), varArgs = list(
-        id = id,
-        value = value,
-        scale = scale,
-        min = min,
-        max = max,
-        slot,
-        `slot-back-side`,
-        style = style,
-        ...
-      )),
-      deps
+  component_tag <- htmltools::tag(
+    'input-knob',
+    .noWS = c("after-begin", "before-end"),
+    varArgs = list(
+      id = id,
+      value = value,
+      scale = scale,
+      min = min,
+      max = max,
+      slot,
+      `slot-back-side`,
+      style = style,
+      ...
     )
-
-  component_tag
+  )
+  htmltools::attachDependencies(component_tag, inputknob_dependencies())
 }
 
 #' @export

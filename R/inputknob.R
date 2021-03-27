@@ -60,7 +60,7 @@ inputknob <- function(
       ...
     )
   )
-  htmltools::attachDependencies(component_tag, inputknob_dependencies())
+  htmltools::attachDependencies(component_tag, html_dependency_inputknob())
 }
 
 #' @export

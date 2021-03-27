@@ -1,5 +1,5 @@
 #' @export
-inputknob_dependencies <- function() {
+html_dependency_inputknob <- function() {
   list(
     htmltools::htmlDependency(
       name = "input-knob",

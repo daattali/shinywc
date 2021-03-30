@@ -71,6 +71,7 @@ InputKnob <- R6::R6Class(
     .id = NULL,
     .id_noNS = NULL,
     .session = NULL,
+    .attributes = list(),
 
     set_attr = function(attr, value) {
       private$.session$sendCustomMessage('input-knob-attr-set', list(
@@ -80,17 +81,11 @@ InputKnob <- R6::R6Class(
       ))
     },
 
-    get_attr = function(attr, cb) {
-      cbid_noNS <- paste0("__inputknob-", attr, "-", sample(1e9, 1))
-      cbid <- private$.session$ns(cbid_noNS)
-      private$.session$sendCustomMessage('input-knob-attr-get', list(
-        id = private$.id,
-        attr = attr,
-        cbid = cbid
-      ))
-      shiny::observeEvent(private$.session$input[[cbid_noNS]], once = TRUE, {
-        cb(private$.session$input[[cbid_noNS]])
-      })
+    get_attr = function(attr) {
+      if (!attr %in% names(private$.attributes)) {
+        stop(attr, " is not in the list of known attributes")
+      }
+      private$.attributes[[attr]]
     },
 
     call_method = function(method, args = list()) {
@@ -111,6 +106,18 @@ InputKnob <- R6::R6Class(
       private$.session <- session
       private$.id_noNS <- id
       private$.id <- private$.session$ns(private$.id_noNS)
+
+      private$.session$sendCustomMessage('input-knob-init', list(
+        id = private$.id,
+        attributes = list("value", "scale", "min", "max")
+      ))
+
+      shiny::observeEvent(private$.session$input[[paste0(private$.id_noNS, "_knob-attr-change")]], {
+        evt <- private$.session$input[[paste0(private$.id_noNS, "_knob-attr-change")]]
+        attr_name <- names(evt[1])
+        attr_val <- evt[[1]]
+        private$.attributes[[attr_name]] <- attr_val
+      })
     },
 
     id = function() {
@@ -127,26 +134,26 @@ InputKnob <- R6::R6Class(
       private$.session$input[[paste0(private$.id_noNS, "_knob-move-end")]]
     },
 
-    get_value = function(cb) {
-      private$get_attr("value", cb)
+    get_value = function() {
+      private$get_attr("value")
     },
     set_value= function(value) {
       private$set_attr("value", value)
     },
-    get_scale = function(cb) {
-      private$get_attr("scale", cb)
+    get_scale = function() {
+      private$get_attr("scale")
     },
     set_scale = function(value) {
       private$set_attr("scale", value)
     },
-    get_min = function(cb) {
-      private$get_attr("min", cb)
+    get_min = function() {
+      private$get_attr("min")
     },
     set_min = function(value) {
       private$set_attr("min", value)
     },
-    get_max = function(cb) {
-      private$get_attr("max", cb)
+    get_max = function() {
+      private$get_attr("max")
     },
     set_max = function(value) {
       private$set_attr("max", value)

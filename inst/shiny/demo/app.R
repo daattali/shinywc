@@ -54,7 +54,8 @@ test_server <- function(input, output, session) {
 
   observeEvent(input$get, {
     fnx <- paste0("get_", input$attr_get)
-    knob[[fnx]](function(x){ shinyalert::shinyalert(x)})
+    val <- knob[[fnx]]()
+    shinyalert::shinyalert(val)
   })
 
   observeEvent(input$call, {

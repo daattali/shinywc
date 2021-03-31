@@ -1,7 +1,7 @@
 library(shiny)
 library(inputknob)
 
-test_ui <- function(id) {
+test_UI <- function(id) {
   ns <- NS(id)
   tagList(
     inputknob(
@@ -44,7 +44,7 @@ test_ui <- function(id) {
   )
 }
 
-test_server <- function(input, output, session) {
+test <- function(input, output, session) {
   knob <- InputKnob$new("testknob")
 
   observeEvent(input$set, {
@@ -78,12 +78,14 @@ test_server <- function(input, output, session) {
 }
 
 ui <- fluidPage(
-  h1("<input-knob> web component Shiny demo"),
-  test_ui("test")
+  h1("<input-knob> web component Shiny demo - module insertUI"),
+  html_dependency_inputknob(),
+  uiOutput("foo")
 )
 
 server <- function(input, output, session) {
-  callModule(test_server, "test")
+  insertUI(".container-fluid", "beforeEnd", test_UI("test"))
+  callModule(test, "test")
 }
 
 shinyApp(ui, server)

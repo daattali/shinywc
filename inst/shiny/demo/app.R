@@ -79,10 +79,15 @@ test_server <- function(input, output, session) {
 
 ui <- fluidPage(
   h1("<input-knob> web component Shiny demo"),
-  test_ui("test")
+  #test_ui("test")
+  html_dependency_inputknob(),
+  uiOutput("bb")
 )
 
 server <- function(input, output, session) {
+  output$bb<-renderUI({
+    test_ui("test")
+  })
   callModule(test_server, "test")
 }
 

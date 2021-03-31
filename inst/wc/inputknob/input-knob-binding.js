@@ -49,26 +49,49 @@ Shiny.addCustomMessageHandler('input-knob-call', function(message) {
   document.getElementById(id)[[method]](args);
 });
 
+shinywcInputKnob = function() {
 
-const shinywcMutationObserver = new MutationObserver(function(mutations) {
-  if (mutations.length == 1 && mutations[0].type === 'attributes' && mutations[0].target.id !== '') {
-    const id = mutations[0].target.id;
-    const attr = mutations[0].attributeName;
-    const val = document.getElementById(id)[[attr]];
-    const cbid = id + '_knob-attr-change';
-    Shiny.setInputValue(cbid, { [attr] : val }, { priority: "event" });
+  return {
+
+    idsToInit : new Set(),
+
+    mutationObserver : new MutationObserver(function(mutations) {
+      if (mutations.length == 1 && mutations[0].type === 'attributes' && mutations[0].target.id !== '') {
+        const id = mutations[0].target.id;
+        const attr = mutations[0].attributeName;
+        const val = document.getElementById(id)[[attr]];
+        const cbid = id + '_knob-attr-change';
+        Shiny.setInputValue(cbid, { [attr] : val }, { priority: "event" });
+      }
+    }),
+
+    checkInit : function(id) {
+      if (shinywcInputKnob.idsToInit.has(id)) {
+        shinywcInputKnob.idsToInit.delete(id);
+        shinywcInputKnob.init(id);
+      }
+    },
+
+    init : function(id) {
+      const el = document.getElementById(id);
+      shinywcInputKnob.mutationObserver.observe(el, { attributes: true, subtree: false, childList: false });
+
+      const attributes = ["value", "scale", "min", "max"];
+      const cbid = id + '_knob-attr-change';
+      attributes.forEach(function (attr, idx) {
+        Shiny.setInputValue(cbid, { [attr] : el[[attr]] }, { priority: "event" });
+      });
+    }
+
   }
-});
+}();
+
 Shiny.addCustomMessageHandler('input-knob-init', function(message) {
   const id = message.id;
   const el = document.getElementById(id);
-  setTimeout(function() {
-    shinywcMutationObserver.observe(el, { attributes: true, subtree: false, childList: false });
-  }, 0);
-
-  const attributes = message.attributes;
-  const cbid = id + '_knob-attr-change';
-  attributes.forEach(function (attr, idx) {
-    Shiny.setInputValue(cbid, { [attr] : el[[attr]] }, { priority: "event" });
-  });
+  if (el === null) {
+    shinywcInputKnob.idsToInit.add(id);
+  } else {
+    shinywcInputKnob.init(id);
+  }
 });

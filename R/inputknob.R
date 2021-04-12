@@ -139,7 +139,7 @@ InputKnob <- R6::R6Class(
     get_value = function() {
       private$get_attr("value")
     },
-    set_value= function(value) {
+    set_value = function(value) {
       private$set_attr("value", value)
     },
     get_scale = function() {

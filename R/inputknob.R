@@ -91,6 +91,27 @@ InputKnob <- R6::R6Class(
       private$.attributes[[attr]]
     },
 
+    set_prop = function(prop, value) {
+      private$.session$sendCustomMessage('input-knob-prop-set', list(
+        id = private$.id,
+        prop = prop,
+        value = value
+      ))
+    },
+
+    get_prop = function(prop, cb) {
+      cbid_noNS <- paste0("__inputknob-", prop, "-", sample(1e9, 1))
+      cbid <- private$.session$ns(cbid_noNS)
+      private$.session$sendCustomMessage('input-knob-prop-get', list(
+        id = private$.id,
+        prop = prop,
+        cbid = cbid
+      ))
+      shiny::observeEvent(private$.session$input[[cbid_noNS]], once = TRUE, {
+        cb(private$.session$input[[cbid_noNS]])
+      })
+    },
+
     call_method = function(method, args = list()) {
       private$.session$sendCustomMessage('input-knob-call', list(
         id = private$.id,
@@ -161,7 +182,30 @@ InputKnob <- R6::R6Class(
       private$set_attr("max", value)
     },
 
-    # TODO add get/set for properties as well (not only attributes)
+    get_value_prop = function(cb) {
+      private$get_prop("value", cb)
+    },
+    set_value_prop = function(value) {
+      private$set_prop("value", value)
+    },
+    get_scale_prop = function(cb) {
+      private$get_prop("scale", cb)
+    },
+    set_scale_prop = function(value) {
+      private$set_prop("scale", value)
+    },
+    get_min_prop = function(cb) {
+      private$get_prop("min", cb)
+    },
+    set_min_prop = function(value) {
+      private$set_prop("min", value)
+    },
+    get_max_prop = function(cb) {
+      private$get_prop("max", cb)
+    },
+    set_max_prop = function(value) {
+      private$set_prop("max", value)
+    },
 
     call_rotateLeft = function(args) {
       private$call_method("rotateLeft", args)

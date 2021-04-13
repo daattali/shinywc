@@ -42,6 +42,21 @@ Shiny.addCustomMessageHandler('input-knob-attr-get', function(message) {
   Shiny.setInputValue(cbid, val, { priority: "event" });
 });
 
+Shiny.addCustomMessageHandler('input-knob-prop-set', function(message) {
+  const id = message.id;
+  const param = message.prop;
+  const val = message.value;
+  document.getElementById(id)[[param]] = val;
+});
+
+Shiny.addCustomMessageHandler('input-knob-prop-get', function(message) {
+  const id = message.id;
+  const param = message.prop;
+  const cbid = message.cbid;
+  const val = document.getElementById(id)[[param]];
+  Shiny.setInputValue(cbid, val, { priority: "event" });
+});
+
 Shiny.addCustomMessageHandler('input-knob-call', function(message) {
   const id = message.id;
   const method = message.method;

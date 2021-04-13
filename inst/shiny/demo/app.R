@@ -14,31 +14,44 @@ test_ui <- function(id) {
 
     fluidRow(
       column(
-        3,
+        2,
         h3("Set attribute"),
-        selectInput(ns("attr"), "Attribute", c("value", "scale", "max", "min")),
-        numericInput(ns("num"), "value", 70),
-        actionButton(ns("set"), "Set")
+        selectInput(ns("set_attr_id"), "Attribute", c("value", "scale", "max", "min")),
+        numericInput(ns("set_attr_val"), "value", 70),
+        actionButton(ns("set_attr"), "Set")
       ),
       column(
-        3,
+        2,
         h3("Get attribute"),
-        selectInput(ns("attr_get"), "Attribute", c("value", "scale", "max", "min")),
-        actionButton(ns("get"), "Show attribute"),
+        selectInput(ns("get_attr_id"), "Attribute", c("value", "scale", "max", "min")),
+        actionButton(ns("get_attr"), "Show attribute"),
       ),
       column(
-        3,
+        2,
+        h3("Set property"),
+        selectInput(ns("set_prop_id"), "Property", c("value", "scale", "max", "min")),
+        numericInput(ns("set_prop_val"), "value", 50),
+        actionButton(ns("set_prop"), "Set")
+      ),
+      column(
+        2,
+        h3("Get property"),
+        selectInput(ns("get_prop_id"), "Property", c("value", "scale", "max", "min")),
+        actionButton(ns("get_prop"), "Show property"),
+      ),
+      column(
+        2,
         h3("Call methods"),
         selectInput(ns("method"), "Method", c("rotateRight", "rotateLeft")),
         numericInput(ns("rotatenum"), "How many turns?", 0.1),
         actionButton(ns("call"), "Go")
       ),
       column(
-        3,
+        2,
         h3("Events"),
-        div("knob-move-change:", textOutput(ns("event_change"), inline = TRUE)),
-        div("knob-move-start:", textOutput(ns("event_start"), inline = TRUE)),
-        div("knob-move-end:", textOutput(ns("event_end"), inline = TRUE))
+        h4("knob-move-change:"), textOutput(ns("event_change")),
+        h4("knob-move-start:"), textOutput(ns("event_start")),
+        h4("knob-move-end:"), textOutput(ns("event_end"))
       )
     )
   )
@@ -47,15 +60,25 @@ test_ui <- function(id) {
 test_server <- function(input, output, session) {
   knob <- InputKnob$new("testknob")
 
-  observeEvent(input$set, {
-    fnx <- paste0("set_", input$attr)
-    knob[[fnx]](input$num)
+  observeEvent(input$set_attr, {
+    fnx <- paste0("set_", input$set_attr_id)
+    knob[[fnx]](input$set_attr_val)
   })
 
-  observeEvent(input$get, {
-    fnx <- paste0("get_", input$attr_get)
+  observeEvent(input$get_attr, {
+    fnx <- paste0("get_", input$get_attr_id)
     val <- knob[[fnx]]()
-    shinyalert::shinyalert(val)
+    shinyalert::shinyalert(text = val)
+  })
+
+  observeEvent(input$set_prop, {
+    fnx <- paste0("set_", input$set_prop_id, "_prop")
+    knob[[fnx]](input$set_prop_val)
+  })
+
+  observeEvent(input$get_prop, {
+    fnx <- paste0("get_", input$get_prop_id, "_prop")
+    knob[[fnx]](function(x){ shinyalert::shinyalert(text = x)})
   })
 
   observeEvent(input$call, {

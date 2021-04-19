@@ -15,23 +15,16 @@ test_ui <- function(id) {
     fluidRow(
       column(
         2,
-        h3("Set attribute"),
-        selectInput(ns("set_attr_id"), "Attribute", c("value", "scale", "max", "min")),
-        numericInput(ns("set_attr_val"), "value", 70),
-        actionButton(ns("set_attr"), "Set")
-      ),
-      column(
-        2,
         h3("Get attribute"),
         selectInput(ns("get_attr_id"), "Attribute", c("value", "scale", "max", "min")),
         actionButton(ns("get_attr"), "Show attribute"),
       ),
       column(
         2,
-        h3("Set property"),
-        selectInput(ns("set_prop_id"), "Property", c("value", "scale", "max", "min")),
-        numericInput(ns("set_prop_val"), "value", 50),
-        actionButton(ns("set_prop"), "Set")
+        h3("Set attribute"),
+        selectInput(ns("set_attr_id"), "Attribute", c("value", "scale", "max", "min")),
+        numericInput(ns("set_attr_val"), "value", 70),
+        actionButton(ns("set_attr"), "Set")
       ),
       column(
         2,
@@ -41,7 +34,14 @@ test_ui <- function(id) {
       ),
       column(
         2,
-        h3("Call methods"),
+        h3("Set property"),
+        selectInput(ns("set_prop_id"), "Property", c("value", "scale", "max", "min")),
+        numericInput(ns("set_prop_val"), "Value", 50),
+        actionButton(ns("set_prop"), "Set")
+      ),
+      column(
+        2,
+        h3("Call method"),
         selectInput(ns("method"), "Method", c("rotateRight", "rotateLeft")),
         numericInput(ns("rotatenum"), "How many turns?", 0.1),
         actionButton(ns("call"), "Go")
@@ -60,25 +60,25 @@ test_ui <- function(id) {
 test_server <- function(input, output, session) {
   knob <- InputKnob$new("testknob")
 
-  observeEvent(input$set_attr, {
-    fnx <- paste0("set_", input$set_attr_id)
-    knob[[fnx]](input$set_attr_val)
-  })
-
   observeEvent(input$get_attr, {
     fnx <- paste0("get_", input$get_attr_id)
     val <- knob[[fnx]]()
     shinyalert::shinyalert(text = val)
   })
 
-  observeEvent(input$set_prop, {
-    fnx <- paste0("set_", input$set_prop_id, "_prop")
-    knob[[fnx]](input$set_prop_val)
+  observeEvent(input$set_attr, {
+    fnx <- paste0("set_", input$set_attr_id)
+    knob[[fnx]](input$set_attr_val)
   })
 
   observeEvent(input$get_prop, {
     fnx <- paste0("get_", input$get_prop_id, "_prop")
-    knob[[fnx]](function(x){ shinyalert::shinyalert(text = x)})
+    track[[fnx]](function(x){ shinyalert::shinyalert(text = as.character(jsonlite::toJSON(x))) })
+  })
+
+  observeEvent(input$set_prop, {
+    fnx <- paste0("set_", input$set_prop_id, "_prop")
+    knob[[fnx]](input$set_prop_val)
   })
 
   observeEvent(input$call, {

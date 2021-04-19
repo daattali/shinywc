@@ -1,0 +1,51 @@
+{
+  "version": "experimental",
+  "tags": [
+    {
+      "name": "epiviz-genes-track",
+      "version": "0.1.0",
+      "attributes": [
+        {
+          "name": "json-data"
+        }
+      ],
+      "properties": [
+        {
+          "name": "chartColors"
+        },
+        {
+          "name": "chartSettings"
+        }
+      ],
+      "events": [
+        {
+          "name": "dimChanged"
+        },
+        {
+          "name": "hover"
+        },
+        {
+          "name": "unHover"
+        }
+      ],
+      "slots": [
+      ],
+      "cssProperties": [
+      ],
+      "methods": [
+        {
+          "name": "hostHovered"
+        },
+        {
+          "name": "hostUnhovered"
+        },
+        {
+          "name": "hover"
+        },
+        {
+          "name": "unHover"
+        }
+      ]
+    }
+  ]
+}

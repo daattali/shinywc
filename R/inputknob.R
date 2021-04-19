@@ -100,7 +100,7 @@ InputKnob <- R6::R6Class(
     },
 
     get_prop = function(prop, cb) {
-      cbid_noNS <- paste0("__inputknob-", prop, "-", sample(1e9, 1))
+      cbid_noNS <- paste0("__input-knob-", prop, "-", sample(1e9, 1))
       cbid <- private$.session$ns(cbid_noNS)
       private$.session$sendCustomMessage('input-knob-prop-get', list(
         id = private$.id,

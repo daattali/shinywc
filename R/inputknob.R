@@ -86,7 +86,7 @@ InputKnob <- R6::R6Class(
 
     get_attr = function(attr) {
       if (!attr %in% names(private$.attributes)) {
-        stop(attr, " is not in the list of known attributes")
+        return(NULL)
       }
       private$.attributes[[attr]]
     },

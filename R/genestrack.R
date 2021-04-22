@@ -60,7 +60,7 @@ addResourcePath("epiviz", system.file("wc", "epiviz", "lib", package = "inputkno
       varArgs = list(
         id = id,
         `json-data` = jsonData,
-        `chart-colors`= NULL,
+        `chart-colors` = chartColors,
         ...
       )
     )
@@ -93,7 +93,7 @@ EpivizGenesTrack <- R6::R6Class(
 
     get_attr = function(attr) {
       if (!attr %in% names(private$.attributes)) {
-        stop(attr, " is not in the list of known attributes")
+        return(NULL)
       }
       private$.attributes[[attr]]
     },
@@ -169,6 +169,12 @@ EpivizGenesTrack <- R6::R6Class(
     },
     set_jsonData = function(value) {
       private$set_attr("json-data", value)
+    },
+    get_chartColors = function() {
+      private$get_attr("chart-colors")
+    },
+    set_chartColors = function(value) {
+      private$set_attr("chart-colors", value)
     },
     get_chartColors_prop = function(cb) {
       private$get_prop("chartColors", cb)

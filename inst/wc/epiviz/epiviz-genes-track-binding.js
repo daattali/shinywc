@@ -93,7 +93,7 @@ shinywcEpivizGenesTrack = function() {
       const el = document.getElementById(id);
       shinywcEpivizGenesTrack.mutationObserver.observe(el, { attributes: true, subtree: false, childList: false });
 
-      const attributes = ["json-data"];
+      const attributes = ["json-data", "chart-colors"];
       const cbid = id + '_epiviz-genes-track-attr-change';
       attributes.forEach(function (attr, idx) {
         Shiny.setInputValue(cbid, { [attr] : el.getAttribute(attr) }, { priority: "event" });

@@ -30,8 +30,15 @@ test_ui <- function(id) {
       column(
         2,
         h3("Get attribute"),
-        selectInput(ns("get_attr_id"), "Attribute", c("jsonData")),
+        selectInput(ns("get_attr_id"), "Attribute", c("jsonData", "chartColors")),
         actionButton(ns("get_attr"), "Show attribute"),
+      ),
+      column(
+        2,
+        h3("Set attribute"),
+        selectInput(ns("set_attr_id"), "Attribute", c("jsonData", "chartColors")),
+        textInput(ns("set_attr_val"), "value", ""),
+        actionButton(ns("set_attr"), "Set")
       ),
       column(
         2,
@@ -54,7 +61,7 @@ test_ui <- function(id) {
         actionButton(ns("call"), "Go")
       ),
       column(
-        4,
+        2,
         h3("Events"),
         h4("dimChanged:"), textOutput(ns("event_dimChanged")),
         h4("hover:"), textOutput(ns("event_hover")),
@@ -72,6 +79,11 @@ test_server <- function(input, output, session) {
     fnx <- paste0("get_", input$get_attr_id)
     val <- track[[fnx]]()
     shinyalert::shinyalert(text = val)
+  })
+
+  observeEvent(input$set_attr, {
+    fnx <- paste0("set_", input$set_attr_id)
+    track[[fnx]](input$set_attr_val)
   })
 
   observeEvent(input$get_prop, {

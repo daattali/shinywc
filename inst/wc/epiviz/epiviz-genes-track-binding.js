@@ -62,8 +62,8 @@ Shiny.addCustomMessageHandler('epiviz-genes-track-prop-get', function(message) {
 Shiny.addCustomMessageHandler('epiviz-genes-track-call', function(message) {
   const id = message.id;
   const method = message.method;
-  const args = message.args;
-  document.getElementById(id)[[method]](args);
+  const params = message.params;
+  document.getElementById(id)[[method]](...params);
 });
 
 shinywcEpivizGenesTrack = function() {

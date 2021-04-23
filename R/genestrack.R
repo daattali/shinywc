@@ -121,11 +121,11 @@ EpivizGenesTrack <- R6::R6Class(
       })
     },
 
-    call_method = function(method, args = list()) {
+    call_method = function(method, params = list()) {
       private$.session$sendCustomMessage('epiviz-genes-track-call', list(
         id = private$.id,
         method = method,
-        args = args
+        params = params
       ))
     }
   ),
@@ -196,8 +196,8 @@ EpivizGenesTrack <- R6::R6Class(
     call_hostUnhovered = function() {
       private$call_method("hostUnhovered")
     },
-    call_hover = function(args) {
-      private$call_method("hover", args)
+    call_hover = function(data) {
+      private$call_method("hover", list(data))
     },
     call_unHover = function() {
       private$call_method("unHover")

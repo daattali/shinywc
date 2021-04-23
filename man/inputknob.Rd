@@ -24,9 +24,9 @@ generated.}
 
 \item{scale}{TODO}
 
-\item{min}{TODO}
+\item{min}{Required}
 
-\item{max}{TODO}
+\item{max}{Required}
 
 \item{slot}{Content to place in the default (unnamed) slot.}
 

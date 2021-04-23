@@ -1,3 +1,14 @@
+required_params <- function(...) {
+  params <- eval(substitute(alist(...)))
+  env <- parent.frame()
+  for (param in params) {
+    param_name <- deparse(param)
+    if (is.null(get(param_name, env))) {
+      stop("Parameter `", param_name, "` is required", call. = FALSE)
+    }
+  }
+}
+
 #' Create a `<input-knob>` web component
 #'
 #' Binding to the `<input-knob>` web component version 1.0.0.
@@ -6,8 +17,8 @@
 #' generated.
 #' @param value TODO
 #' @param scale TODO
-#' @param min TODO
-#' @param max TODO
+#' @param min Required
+#' @param max Required
 #' @param slot Content to place in the default (unnamed) slot.
 #' @param slot_back_side TODO
 #' @param css_knob_size TODO
@@ -24,6 +35,8 @@ inputknob <- function(
   css_knob_size = NULL,
   ...
   ) {
+
+  required_params(min, max)
 
   params <- eval(substitute(alist(...)))
   if (length(params) > 0) {

@@ -37,8 +37,8 @@ html_dependency_genestrack <- function() {
 #' @export
 epivizGenesTrackUI <- function(
   id = NULL,
-  jsonData = NULL,
-  chartColors = NULL,
+  json_data = NULL,
+  chart_colors = NULL,
   ...
 ) {
 
@@ -59,8 +59,8 @@ addResourcePath("epiviz", system.file("wc", "epiviz", "lib", package = "inputkno
       .noWS = c("after-begin", "before-end"),
       varArgs = list(
         id = id,
-        `json-data` = jsonData,
-        `chart-colors` = chartColors,
+        `json-data` = json_data,
+        `chart-colors` = chart_colors,
         ...
       )
     )
@@ -164,16 +164,16 @@ EpivizGenesTrack <- R6::R6Class(
       private$.session$input[[paste0(private$.id_noNS, "_evt_unHover")]]
     },
 
-    get_jsonData = function() {
+    get_json_data = function() {
       private$get_attr("json-data")
     },
-    set_jsonData = function(value) {
+    set_json_data = function(value) {
       private$set_attr("json-data", value)
     },
-    get_chartColors = function() {
+    get_chart_colors = function() {
       private$get_attr("chart-colors")
     },
-    set_chartColors = function(value) {
+    set_chart_colors = function(value) {
       private$set_attr("chart-colors", value)
     },
     get_chartColors_prop = function(cb) {

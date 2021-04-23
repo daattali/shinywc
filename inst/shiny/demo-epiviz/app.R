@@ -23,20 +23,20 @@ test_ui <- function(id) {
   tagList(
     epivizGenesTrackUI(
       id = ns("testtrack"),
-      jsonData = jsondata
+      json_data = jsondata
     ),
 
     fluidRow(
       column(
         2,
         h3("Get attribute"),
-        selectInput(ns("get_attr_id"), "Attribute", c("jsonData", "chartColors")),
+        selectInput(ns("get_attr_id"), "Attribute", c("json_data", "chart_colors")),
         actionButton(ns("get_attr"), "Show attribute"),
       ),
       column(
         2,
         h3("Set attribute"),
-        selectInput(ns("set_attr_id"), "Attribute", c("jsonData", "chartColors")),
+        selectInput(ns("set_attr_id"), "Attribute", c("json_data", "chart_colors")),
         textInput(ns("set_attr_val"), "value", ""),
         actionButton(ns("set_attr"), "Set")
       ),

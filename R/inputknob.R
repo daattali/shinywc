@@ -131,11 +131,11 @@ InputKnob <- R6::R6Class(
       })
     },
 
-    call_method = function(method, args = list()) {
+    call_method = function(method, params = list()) {
       private$.session$sendCustomMessage('input-knob-call', list(
         id = private$.id,
         method = method,
-        args = args
+        params = params
       ))
     }
   ),
@@ -226,11 +226,13 @@ InputKnob <- R6::R6Class(
       private$set_prop("max", value)
     },
 
-    call_rotateLeft = function(args) {
-      private$call_method("rotateLeft", args)
+    call_rotateLeft = function(turns) {
+      params <- list(turns)
+      private$call_method("rotateLeft", params)
     },
-    call_rotateRight = function(args) {
-      private$call_method("rotateRight", args)
+    call_rotateRight = function(turns) {
+      params <- list(turns)
+      private$call_method("rotateRight", params)
     }
 
   )

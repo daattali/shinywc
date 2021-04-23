@@ -60,8 +60,8 @@ Shiny.addCustomMessageHandler('input-knob-prop-get', function(message) {
 Shiny.addCustomMessageHandler('input-knob-call', function(message) {
   const id = message.id;
   const method = message.method;
-  const args = message.args;
-  document.getElementById(id)[[method]](args);
+  const params = message.params;
+  document.getElementById(id)[[method]](...params);
 });
 
 shinywcInputKnob = function() {

@@ -61,10 +61,12 @@
       ],
       "methods": [
         {
-          "name": "rotateLeft"
+          "name": "rotateLeft",
+          "params": ["turns"]
         },
         {
-          "name": "rotateRight"
+          "name": "rotateRight",
+          "params": ["turns"]
         }
       ]
     }

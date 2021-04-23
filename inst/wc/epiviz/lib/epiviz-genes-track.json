@@ -6,7 +6,8 @@
       "version": "0.1.0",
       "attributes": [
         {
-          "name": "json-data"
+          "name": "json-data",
+          "required": true
         },
         {
           "name": "chart-colors"

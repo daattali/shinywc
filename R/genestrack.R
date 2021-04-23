@@ -42,6 +42,8 @@ epivizGenesTrackUI <- function(
   ...
 ) {
 
+  required_params(json_data)
+
   params <- eval(substitute(alist(...)))
   if (length(params) > 0) {
     if (is.null(names(params)) || any(names(params) == "")) {

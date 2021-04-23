@@ -12,10 +12,12 @@
           "name": "scale"
         },
         {
-          "name": "min"
+          "name": "min",
+          "required": true
         },
         {
-          "name": "max"
+          "name": "max",
+          "required": true
         }
       ],
       "properties": [

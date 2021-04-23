@@ -4,7 +4,13 @@
 #'
 #' @param id ID for the component. If not provided, an ID will be automatically
 #' generated.
+#' @param value TODO
+#' @param scale TODO
+#' @param min TODO
+#' @param max TODO
 #' @param slot Content to place in the default (unnamed) slot.
+#' @param slot_back_side TODO
+#' @param css_knob_size TODO
 #' @param ... Any additional HTML attributes to add to the element tag.
 #' @export
 inputknob <- function(
@@ -14,15 +20,15 @@ inputknob <- function(
   min = NULL,
   max = NULL,
   slot = NULL,
-  `slot-back-side` = NULL,
-  `css-knob-size` = NULL,
+  slot_back_side = NULL,
+  css_knob_size = NULL,
   ...
   ) {
 
   params <- eval(substitute(alist(...)))
   if (length(params) > 0) {
     if (is.null(names(params)) || any(names(params) == "")) {
-      stop("inputknob: additional parameters must be named attributes")
+      stop("inputknob: additional parameters must be named attributes", call. = FALSE)
     }
   }
 
@@ -30,19 +36,19 @@ inputknob <- function(
     id <- paste0('input-knob-', sample(1e9, 1))
   }
 
-  if (!is.null(`slot-back-side`)) {
-    if (!inherits(`slot-back-side`, "shiny.tag")) {
-      stop("inputknob: slot-back-side must be a valid HTML tag")
+  if (!is.null(slot_back_side)) {
+    if (!inherits(slot_back_side, "shiny.tag")) {
+      stop("inputknob: slot-back-side must be a valid HTML tag", call. = FALSE)
     }
-    `slot-back-side` <- shiny::tagAppendAttributes(
-      `slot-back-side`,
+    slot_back_side <- shiny::tagAppendAttributes(
+      slot_back_side,
       slot = "back-side"
     )
   }
 
   style <- NULL
-  if (!is.null(`css-knob-size`)) {
-    style <- paste0("--", "knob-size", ":", `css-knob-size`, ";")
+  if (!is.null(css_knob_size)) {
+    style <- paste0("--", "knob-size", ":", css_knob_size, ";")
   }
 
   component_tag <- htmltools::tagList(
@@ -56,7 +62,7 @@ inputknob <- function(
         min = min,
         max = max,
         slot,
-        `slot-back-side`,
+        slot_back_side,
         style = style,
         ...
       )

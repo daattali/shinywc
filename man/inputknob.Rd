@@ -11,8 +11,8 @@ inputknob(
   min = NULL,
   max = NULL,
   slot = NULL,
-  `slot-back-side` = NULL,
-  `css-knob-size` = NULL,
+  slot_back_side = NULL,
+  css_knob_size = NULL,
   ...
 )
 }
@@ -20,7 +20,19 @@ inputknob(
 \item{id}{ID for the component. If not provided, an ID will be automatically
 generated.}
 
+\item{value}{TODO}
+
+\item{scale}{TODO}
+
+\item{min}{TODO}
+
+\item{max}{TODO}
+
 \item{slot}{Content to place in the default (unnamed) slot.}
+
+\item{slot_back_side}{TODO}
+
+\item{css_knob_size}{TODO}
 
 \item{...}{Any additional HTML attributes to add to the element tag.}
 }

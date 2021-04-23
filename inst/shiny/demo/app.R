@@ -8,8 +8,8 @@ test_ui <- function(id) {
       id = ns("testknob"),
       value = 50, scale = 10, min = 0, max = 100,
       slot = "^",
-      `slot-back-side` = tags$span('..'),
-      `css-knob-size` = "150px"
+      slot_back_side = tags$span('..'),
+      css_knob_size = "150px"
     ),
 
     fluidRow(

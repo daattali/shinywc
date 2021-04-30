@@ -1,5 +1,5 @@
 library(shiny)
-library(inputknob)
+library(shinywc)
 
 ui <- fluidPage(
   h1("<input-knob> web component Shiny demo - basic"),

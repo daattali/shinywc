@@ -1,4 +1,4 @@
-# inputknob
+# shinywc
 
 To see a demo of the web component purely in HTML, open `inst/wc/inputknob/lib/input-knob-demo.html` (make sure to run a server to not receive CORS errors).
 

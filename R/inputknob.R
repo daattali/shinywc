@@ -6,7 +6,7 @@ html_dependency_inputknob <- function() {
       name = "input-knob",
       version = "1.0.0",
       src = "wc/inputknob/lib",
-      package = "inputknob",
+      package = "shinywc",
       script = list(src = "input-knob.js", type = "module")
     )
   )

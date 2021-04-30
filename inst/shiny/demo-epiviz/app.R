@@ -1,5 +1,5 @@
 library(shiny)
-library(inputknob)
+library(shinywc)
 
 jsondata <-
   "{

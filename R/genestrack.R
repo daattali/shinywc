@@ -1,5 +1,5 @@
 .onLoad <- function(libname, pkgname) {
-  shiny::addResourcePath("epiviz", system.file("wc", "epiviz", "lib", package = "inputknob"))
+  shiny::addResourcePath("epiviz", system.file("wc", "epiviz", "lib", package = "shinywc"))
 }
 
 #' @export

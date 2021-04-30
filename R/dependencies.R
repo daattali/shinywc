@@ -32,9 +32,9 @@ dependency_webcomponentsjs <- function(version = "2.5.0") {
 dependency_shinywc <- function() {
   htmltools::htmlDependency(
     name = "shinywc",
-    version = as.character(utils::packageVersion("inputknob")),
+    version = as.character(utils::packageVersion("shinywc")),
     src = "srcjs",
-    package = "inputknob",
+    package = "shinywc",
     script = "shinywc.js"
   )
 }

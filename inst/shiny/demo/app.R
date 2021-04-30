@@ -1,5 +1,5 @@
 library(shiny)
-library(inputknob)
+library(shinywc)
 
 test_ui <- function(id) {
   ns <- NS(id)

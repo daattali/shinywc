@@ -7,7 +7,7 @@ Authors@R: c(
     )
 Description: todo
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.3.0)
 Imports:
     htmltools (>= 0.2.6),
     shiny

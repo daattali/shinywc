@@ -1,12 +1,15 @@
-required_params <- function(...) {
-  params <- eval(substitute(alist(...)))
-  env <- parent.frame()
-  for (param in params) {
-    param_name <- deparse(param)
-    if (is.null(get(param_name, env))) {
-      stop("Parameter `", param_name, "` is required", call. = FALSE)
-    }
-  }
+#' @export
+html_dependency_inputknob <- function() {
+  list(
+    dependency_shinywc(),
+    htmltools::htmlDependency(
+      name = "input-knob",
+      version = "1.0.0",
+      src = "wc/inputknob/lib",
+      package = "inputknob",
+      script = list(src = "input-knob.js", type = "module")
+    )
+  )
 }
 
 #' Create a `<input-knob>` web component
@@ -51,7 +54,7 @@ inputknob <- function(
 
   if (!is.null(slot_back_side)) {
     if (!inherits(slot_back_side, "shiny.tag")) {
-      stop("inputknob: slot-back-side must be a valid HTML tag", call. = FALSE)
+      stop("input-knob: slot-back-side must be a valid HTML tag", call. = FALSE)
     }
     slot_back_side <- shiny::tagAppendAttributes(
       slot_back_side,
@@ -63,6 +66,13 @@ inputknob <- function(
   if (!is.null(css_knob_size)) {
     style <- paste0("--", "knob-size", ":", css_knob_size, ";")
   }
+
+  component_details <- list(
+    name = "input-knob",
+    attributes = list("value", "scale", "min", "max"),
+    events = list("knob-move-change", "knob-move-start", "knob-move-end")
+  )
+  component_details <- jsonlite::toJSON(component_details, auto_unbox = TRUE)
 
   component_tag <- htmltools::tagList(
     htmltools::tag(
@@ -80,7 +90,10 @@ inputknob <- function(
         ...
       )
     ),
-    htmltools::tags$script(paste0("shinywcInputKnob.checkInit('", id, "')"))
+    htmltools::singleton(htmltools::tags$head(
+      htmltools::tags$script(sprintf("shinywc.setupComponent(%s)", component_details))
+    )),
+    htmltools::tags$script(sprintf("shinywc.registerComponent('%s', '%s')", "input-knob", id))
   )
   htmltools::attachDependencies(component_tag, html_dependency_inputknob())
 }
@@ -96,7 +109,7 @@ InputKnob <- R6::R6Class(
     .attributes = list(),
 
     set_attr = function(attr, value) {
-      private$.session$sendCustomMessage('input-knob-attr-set', list(
+      private$.session$sendCustomMessage('shinywc-attr-set', list(
         id = private$.id,
         attr = attr,
         value = value
@@ -111,7 +124,7 @@ InputKnob <- R6::R6Class(
     },
 
     set_prop = function(prop, value) {
-      private$.session$sendCustomMessage('input-knob-prop-set', list(
+      private$.session$sendCustomMessage('shinywc-prop-set', list(
         id = private$.id,
         prop = prop,
         value = value
@@ -121,7 +134,7 @@ InputKnob <- R6::R6Class(
     get_prop = function(prop, cb) {
       cbid_noNS <- paste0("__input-knob-", prop, "-", sample(1e9, 1))
       cbid <- private$.session$ns(cbid_noNS)
-      private$.session$sendCustomMessage('input-knob-prop-get', list(
+      private$.session$sendCustomMessage('shinywc-prop-get', list(
         id = private$.id,
         prop = prop,
         cbid = cbid
@@ -132,7 +145,7 @@ InputKnob <- R6::R6Class(
     },
 
     call_method = function(method, params = list()) {
-      private$.session$sendCustomMessage('input-knob-call', list(
+      private$.session$sendCustomMessage('shinywc-call-method', list(
         id = private$.id,
         method = method,
         params = params
@@ -150,12 +163,12 @@ InputKnob <- R6::R6Class(
       private$.id_noNS <- id
       private$.id <- private$.session$ns(private$.id_noNS)
 
-      private$.session$sendCustomMessage('input-knob-init', list(
+      private$.session$sendCustomMessage('shinywc-init-component', list(
         id = private$.id
       ))
 
-      shiny::observeEvent(private$.session$input[[paste0(private$.id_noNS, "_knob-attr-change")]], {
-        evt <- private$.session$input[[paste0(private$.id_noNS, "_knob-attr-change")]]
+      shiny::observeEvent(private$.session$input[[paste0(private$.id_noNS, "_input-knob-attr-change")]], {
+        evt <- private$.session$input[[paste0(private$.id_noNS, "_input-knob-attr-change")]]
         attr_name <- names(evt[1])
         attr_val <- evt[[1]]
         private$.attributes[[attr_name]] <- attr_val
@@ -167,13 +180,13 @@ InputKnob <- R6::R6Class(
     },
 
     event_knob_move_change = function() {
-      private$.session$input[[paste0(private$.id_noNS, "_knob-move-change")]]
+      private$.session$input[[paste0(private$.id_noNS, "_event_knob-move-change")]]
     },
     event_knob_move_start = function() {
-      private$.session$input[[paste0(private$.id_noNS, "_knob-move-start")]]
+      private$.session$input[[paste0(private$.id_noNS, "_event_knob-move-start")]]
     },
     event_knob_move_end = function() {
-      private$.session$input[[paste0(private$.id_noNS, "_knob-move-end")]]
+      private$.session$input[[paste0(private$.id_noNS, "_event_knob-move-end")]]
     },
 
     get_value = function() {

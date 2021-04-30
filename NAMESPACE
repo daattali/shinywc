@@ -2,8 +2,9 @@
 
 export(EpivizGenesTrack)
 export(InputKnob)
+export(dependency_jqueryui)
+export(dependency_webcomponentsjs)
 export(epivizGenesTrackUI)
 export(html_dependency_genestrack)
 export(html_dependency_inputknob)
-export(html_dependency_webcomponentsjs)
 export(inputknob)

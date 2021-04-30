@@ -1,35 +1,13 @@
+.onLoad <- function(libname, pkgname) {
+  shiny::addResourcePath("epiviz", system.file("wc", "epiviz", "lib", package = "inputknob"))
+}
+
 #' @export
 html_dependency_genestrack <- function() {
   list(
-    htmltools::htmlDependency(
-      name = "jquery-ui",
-      version = "1.12.1",
-      src = c(href = "//code.jquery.com/ui/1.12.1"),
-      stylesheet = "themes/base/jquery-ui.css",
-      script = "jquery-ui.js"
-    ),
-    htmltools::htmlDependency(
-      name = "webcomponents-lite",
-      version = "1.0.0",
-      src = "wc/epiviz/lib",
-      package = "inputknob",
-      script = "webcomponents-lite.js"
-    )
-    # https://github.com/rstudio/htmltools/issues/210
-    # ,htmltools::htmlDependency(
-    #   name = "epiviz-components",
-    #   version = "1.0.0",
-    #   src = "wc/epiviz/lib",
-    #   package = "inputknob",
-    #   stylesheet = list(href = "epiviz-components.html", rel = "import")
-    # )
-    ,htmltools::htmlDependency(
-      name = "epiviz-genes-track-bindings",
-      version = "1.0.0",
-      src = "wc/epiviz",
-      package = "inputknob",
-      script = "epiviz-genes-track-binding.js"
-    )
+    dependency_shinywc(),
+    dependency_jqueryui(),
+    dependency_webcomponentsjs(version = "1.1.0")
   )
 }
 
@@ -54,7 +32,14 @@ epivizGenesTrackUI <- function(
   if (is.null(id)) {
     id <- paste0('epiviz-genes-track-', sample(1e9, 1))
   }
-addResourcePath("epiviz", system.file("wc", "epiviz", "lib", package = "inputknob"))
+
+  component_details <- list(
+    name = "epiviz-genes-track",
+    attributes = list("json-data", "chart-colors"),
+    events = list("dimChanged", "hover", "unHover")
+  )
+  component_details <- jsonlite::toJSON(component_details, auto_unbox = TRUE)
+
   component_tag <- htmltools::tagList(
     htmltools::tag(
       'epiviz-genes-track',
@@ -65,12 +50,12 @@ addResourcePath("epiviz", system.file("wc", "epiviz", "lib", package = "inputkno
         `chart-colors` = chart_colors,
         ...
       )
-    )
-    , htmltools::tags$script(paste0("shinywcEpivizGenesTrack.checkInit('", id, "')"))
-    , htmltools::tags$head(
-      # https://github.com/rstudio/htmltools/issues/210
+    ),
+    htmltools::singleton(htmltools::tags$head(
+      htmltools::tags$script(sprintf("shinywc.setupComponent(%s)", component_details)),
       htmltools::tags$link(rel = "import", href = "epiviz/epiviz-components.html")
-    )
+    )),
+    htmltools::tags$script(sprintf("shinywc.registerComponent('%s', '%s')", "epiviz-genes-track", id))
   )
   htmltools::attachDependencies(component_tag, html_dependency_genestrack())
 }
@@ -86,7 +71,7 @@ EpivizGenesTrack <- R6::R6Class(
     .attributes = list(),
 
     set_attr = function(attr, value) {
-      private$.session$sendCustomMessage('epiviz-genes-track-attr-set', list(
+      private$.session$sendCustomMessage('shinywc-attr-set', list(
         id = private$.id,
         attr = attr,
         value = value
@@ -101,7 +86,7 @@ EpivizGenesTrack <- R6::R6Class(
     },
 
     set_prop = function(prop, value) {
-      private$.session$sendCustomMessage('epiviz-genes-track-prop-set', list(
+      private$.session$sendCustomMessage('shinywc-prop-set', list(
         id = private$.id,
         prop = prop,
         value = value
@@ -111,7 +96,7 @@ EpivizGenesTrack <- R6::R6Class(
     get_prop = function(prop, cb) {
       cbid_noNS <- paste0("__epiviz-genes-track-", prop, "-", sample(1e9, 1))
       cbid <- private$.session$ns(cbid_noNS)
-      private$.session$sendCustomMessage('epiviz-genes-track-prop-get', list(
+      private$.session$sendCustomMessage('shinywc-prop-get', list(
         id = private$.id,
         prop = prop,
         cbid = cbid
@@ -122,7 +107,7 @@ EpivizGenesTrack <- R6::R6Class(
     },
 
     call_method = function(method, params = list()) {
-      private$.session$sendCustomMessage('epiviz-genes-track-call', list(
+      private$.session$sendCustomMessage('shinywc-call-method', list(
         id = private$.id,
         method = method,
         params = params
@@ -140,7 +125,7 @@ EpivizGenesTrack <- R6::R6Class(
       private$.id_noNS <- id
       private$.id <- private$.session$ns(private$.id_noNS)
 
-      private$.session$sendCustomMessage('epiviz-genes-track-init', list(
+      private$.session$sendCustomMessage('shinywc-init-component', list(
         id = private$.id
       ))
 
@@ -157,13 +142,13 @@ EpivizGenesTrack <- R6::R6Class(
     },
 
     event_dimChanged = function() {
-      private$.session$input[[paste0(private$.id_noNS, "_evt_dimChanged")]]
+      private$.session$input[[paste0(private$.id_noNS, "_event_dimChanged")]]
     },
     event_hover = function() {
-      private$.session$input[[paste0(private$.id_noNS, "_evt_hover")]]
+      private$.session$input[[paste0(private$.id_noNS, "_event_hover")]]
     },
     event_unHover = function() {
-      private$.session$input[[paste0(private$.id_noNS, "_evt_unHover")]]
+      private$.session$input[[paste0(private$.id_noNS, "_event_unHover")]]
     },
 
     get_json_data = function() {

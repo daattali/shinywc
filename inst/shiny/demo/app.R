@@ -73,7 +73,7 @@ test_server <- function(input, output, session) {
 
   observeEvent(input$get_prop, {
     fnx <- paste0("get_", input$get_prop_id, "_prop")
-    track[[fnx]](function(x){ shinyalert::shinyalert(text = as.character(jsonlite::toJSON(x))) })
+    knob[[fnx]](function(x){ shinyalert::shinyalert(text = as.character(jsonlite::toJSON(x))) })
   })
 
   observeEvent(input$set_prop, {

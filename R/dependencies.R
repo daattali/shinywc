@@ -1,3 +1,14 @@
+#' Add a dependency on the shinywc package
+dependency_shinywc <- function() {
+  htmltools::htmlDependency(
+    name = "shinywc",
+    version = as.character(utils::packageVersion("shinywc")),
+    src = "srcjs",
+    package = "shinywc",
+    script = "shinywc.js"
+  )
+}
+
 #' Add a dependency on jQuery UI
 #' @param version The version of jQuery UI to use
 #' @export
@@ -25,16 +36,5 @@ dependency_webcomponentsjs <- function(version = "2.5.0") {
     version = version,
     src = c(href = sprintf("https://unpkg.com/@webcomponents/webcomponentsjs@%s", version)),
     script = sprintf("%s.js", filename)
-  )
-}
-
-#' Add a dependency on the shinywc package
-dependency_shinywc <- function() {
-  htmltools::htmlDependency(
-    name = "shinywc",
-    version = as.character(utils::packageVersion("shinywc")),
-    src = "srcjs",
-    package = "shinywc",
-    script = "shinywc.js"
   )
 }

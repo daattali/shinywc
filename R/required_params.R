@@ -1,3 +1,4 @@
+#' @export
 required_params <- function(...) {
   params <- eval(substitute(alist(...)))
   env <- parent.frame()

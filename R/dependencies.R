@@ -1,4 +1,5 @@
 #' Add a dependency on the shinywc package
+#' @export
 dependency_shinywc <- function() {
   htmltools::htmlDependency(
     name = "shinywc",

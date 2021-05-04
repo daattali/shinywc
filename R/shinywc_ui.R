@@ -16,11 +16,12 @@ clean_style_name <- function(x) {
 #' @export
 shinywc_ui <- function(tag, params, params_extra = list(),
                        attributes = list(), required = list(),
-                       events = list(), slots = list(), styles = list()) {
+                       events = list(), slots = list(), styles = list(),
+                       dependencies = list()) {
 
   for (param in required) {
-    if (is.null(params[[param]])) {
-      stop(tag, ": Parameter `", param, "` is required", call. = FALSE)
+    if (is.null(params[[clean_name(param)]])) {
+      stop(tag, ": Parameter `", clean_name(param), "` is required", call. = FALSE)
     }
   }
 
@@ -105,5 +106,16 @@ shinywc_ui <- function(tag, params, params_extra = list(),
     )),
     htmltools::tags$script(sprintf("shinywc.registerComponent('%s', '%s')", tag, id))
   )
-  htmltools::attachDependencies(full_html, html_dependency_inputknob())
+  full_html <- htmltools::attachDependencies(
+    full_html,
+    shinywc::dependency_shinywc()
+  )
+  if (length(dependencies) > 0) {
+    full_html <- htmltools::attachDependencies(
+      full_html,
+      dependencies,
+      append = TRUE
+    )
+  }
+  full_html
 }

@@ -32,10 +32,6 @@
           "name": "unHover"
         }
       ],
-      "slots": [
-      ],
-      "cssProperties": [
-      ],
       "methods": [
         {
           "name": "hostHovered"

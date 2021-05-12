@@ -46,7 +46,6 @@ shinywc = function() {
   };
 
   var _registerComponent = function(component, id) {
-    console.log('reg')
     _componentTypes[id] = component;
   };
 
@@ -82,7 +81,6 @@ shinywc = function() {
 
     // Register an instance of a component with its component type
     registerComponent : function(component, id) {
-      console.log('ggg');
       _registerComponent(component, id);
       if (_idsToInit.has(id)) {
         _idsToInit.delete(id);

@@ -69,6 +69,11 @@ ShinywcProxy <- R6::R6Class(
       private$.id_noNS <- id
       private$.id <- private$.session$ns(private$.id_noNS)
 
+      if (is.null(private$.session$userData$.shinywc_added) || !private$.session$userData$.shinywc_added) {
+        shiny::insertUI("head", "beforeEnd", dependency_shinywc(), immediate = TRUE)
+        private$.session$userData$.shinywc_added <- TRUE
+      }
+
       private$.session$sendCustomMessage('shinywc-init-component', list(
         id = private$.id
       ))

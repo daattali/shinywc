@@ -35,7 +35,7 @@ shinywc_ui <- function(tag, params, params_extra = list(),
 
         for (slottag in params[[slot_clean]]) {
           if (is_shinywc(slottag)) {
-            slottag[[1]] <- shiny::tagAppendAttributes(slottag[[1]], slot = slot)
+            slottag[[1]][[1]] <- shiny::tagAppendAttributes(slottag[[1]][[1]], slot = slot)
           } else if (is_shiny_tag(slottag)) {
             slottag <- shiny::tagAppendAttributes(slottag, slot = slot)
           } else {

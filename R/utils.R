@@ -2,6 +2,10 @@ clean_name <- function(x) {
   gsub("-", "_", x)
 }
 
+clean_package_name <- function(x){
+  gsub("-", ".", x)
+}
+
 clean_slot_name <- function(x) {
   x <- clean_name(x)
   sprintf("slot_%s", x)
@@ -14,7 +18,9 @@ clean_style_name <- function(x) {
 }
 
 is_shinywc <- function(x) {
-  inherits(x, "shiny.tag.list") && !is.null(htmltools::tagGetAttribute(x[[1]], "data-shinywc-component"))
+  inherits(x, "shiny.tag.list") &&
+    inherits(x[[1]], "shiny.tag.list") &&
+    !is.null(htmltools::tagGetAttribute(x[[1]][[1]], "data-shinywc-component"))
 }
 
 is_shiny_tag <- function(x) {

@@ -1,18 +1,3 @@
-clean_name <- function(x) {
-  gsub("-", "_", x)
-}
-
-clean_slot_name <- function(x) {
-  x <- clean_name(x)
-  sprintf("slot_%s", x)
-}
-
-clean_style_name <- function(x) {
-  x <- gsub("^--", "", x)
-  x <- clean_name(x)
-  sprintf("css_%s", x)
-}
-
 #' @export
 shinywc_ui <- function(tag, params, params_extra = list(),
                        attributes = list(), required = list(),
@@ -41,17 +26,26 @@ shinywc_ui <- function(tag, params, params_extra = list(),
     for (slot in slots) {
       slot_clean <- clean_slot_name(slot)
       if (!is.null(params[[slot_clean]])) {
-        if (!inherits(params[[slot_clean]], "shiny.tag")) {
-          stop(tag, ": Slot ", slot_clean, " must be a valid HTML tag", call. = FALSE)
+        if (is_shiny_tag(params[[slot_clean]])) {
+          params[[slot_clean]] <- htmltools::tagList(params[[slot_clean]])
         }
-        new_slot <- shiny::tagAppendAttributes(
-          params[[slot_clean]],
-          slot = slot
-        )
-        slots_tags <- c(
-          slots_tags,
-          list(new_slot)
-        )
+        if (!inherits(params[[slot_clean]], "shiny.tag.list") && !inherits(params[[slot_clean]], "list")) {
+          stop(tag, ": Slot ", slot_clean, " must be a valid HTML tag, tagList, or list of tags", call. = FALSE)
+        }
+
+        for (slottag in params[[slot_clean]]) {
+          if (is_shinywc(slottag)) {
+            slottag[[1]] <- shiny::tagAppendAttributes(slottag[[1]], slot = slot)
+          } else if (is_shiny_tag(slottag)) {
+            slottag <- shiny::tagAppendAttributes(slottag, slot = slot)
+          } else {
+            stop(tag, ": Slot ", slot_clean, " must be a tagList or list containing HTML tags", call. = FALSE)
+          }
+          slots_tags <- c(
+            slots_tags,
+            list(slottag)
+          )
+        }
       }
     }
   }
@@ -76,7 +70,10 @@ shinywc_ui <- function(tag, params, params_extra = list(),
   )
   component_details <- jsonlite::toJSON(component_details, auto_unbox = TRUE)
 
-  tag_params <- list(id = id)
+  tag_params <- list(
+    id = id,
+    "data-shinywc-component" = "1"
+  )
   for (attribute in attributes) {
     tag_params[[attribute]] <- params[[clean_name(attribute)]]
   }

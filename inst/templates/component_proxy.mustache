@@ -1,0 +1,45 @@
+#' @export
+{{shinywc.clean}}_proxy <- function(id, session = shiny::getDefaultReactiveDomain()) {
+  Shinywc_{{shinywc.clean}}$new(id = id, session = session)
+}
+
+Shinywc_{{shinywc.clean}} <- R6::R6Class(
+  "Shinywc_{{shinywc.clean}}",
+  inherit = shinywc::ShinywcProxy,
+
+  public = list(
+    initialize = function(id, session = shiny::getDefaultReactiveDomain()) {
+      super$initialize(tag = "{{name}}", id = id, session = session)
+    },
+    {{#events}}
+    event_{{clean}} = function() {
+      super$listen_event("{{name}}")
+    },
+    {{/events}}
+    {{#properties}}
+    get_{{clean}}_prop = function(cb) {
+      super$get_prop("{{name}}", cb)
+    },
+    set_{{clean}}_prop = function(value) {
+      super$set_prop("{{name}}", value)
+    },
+    {{/properties}}
+    {{#methods}}
+    call_{{clean}} = function({{#params}}{{.}}, {{/params}}__SHINYWC_REMOVEME__) {
+      params <- list({{#params}}{{.}}, {{/params}}__SHINYWC_REMOVEME__)
+      super$call_method("{{name}}", params)
+    },
+    {{/methods}}
+    __SHINYWC_REMOVEME__
+  ),
+
+  active = list(
+    {{#attributes}}
+    {{clean}} = function(value) {
+      if (missing(value)) super$get_attr("{{name}}")
+      else super$set_attr("{{name}}", value)
+    },
+    {{/attributes}}
+    __SHINYWC_REMOVEME__
+  )
+)

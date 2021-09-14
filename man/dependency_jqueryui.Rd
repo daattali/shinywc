@@ -10,5 +10,5 @@ dependency_jqueryui(version = "1.12.1")
 \item{version}{The version of jQuery UI to use}
 }
 \description{
-Add a dependency on jQuery UI
+Add this to the list of dependencies passed to \code{\link{shinywc_ui}}.
 }

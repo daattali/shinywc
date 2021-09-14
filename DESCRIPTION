@@ -9,8 +9,13 @@ Description: todo
 Depends:
     R (>= 3.3.0)
 Imports:
+    checkmate,
+    fs,
     htmltools (>= 0.2.6),
-    shiny
+    jsonlite,
+    rstudioapi,
+    shiny,
+    utils
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

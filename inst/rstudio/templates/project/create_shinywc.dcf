@@ -1,0 +1,11 @@
+Binding: create_shinywc_gui
+Title: Web Component for Shiny using {shinywc}
+OpenFiles: R/*.R
+
+Parameter: schema
+Widget: FileInput
+Label: JSON schema
+
+Parameter: source
+Widget: FileInput
+Label: Web Component source (JavaScript or HTML file)

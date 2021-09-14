@@ -10,5 +10,5 @@ dependency_webcomponentsjs(version = "2.5.0")
 \item{version}{The version of webcomponentsjs polyfill to use}
 }
 \description{
-Add a dependency on webcomponentsjs polyfill
+Add this to the list of dependencies passed to \code{\link{shinywc_ui}}.
 }

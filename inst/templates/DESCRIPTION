@@ -1,0 +1,17 @@
+Package: {{shinywc.pkgname}}
+Title: {{name}} Web Component for Shiny Applications
+Version: 0.0.0.9000
+Authors@R: c(
+    person("firstname", "lastname", email = "your@email.com",
+      role = c("aut", "cre"))
+    )
+Description: TODO
+Depends:
+    R (>= 3.3.0)
+Imports:
+    htmltools (>= 0.2.6),
+    shiny (>= 1.0),
+    shinywc (>= {{shinywc.version}})
+License: TODO
+Encoding: UTF-8
+LazyData: true

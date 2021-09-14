@@ -1,3 +1,19 @@
+#' Create a Web Component HTML tag to use in a Shiny app's UI
+#'
+#' It's recommended not to call this function from code you write yourself.
+#' This function should be called from code generated automatically using
+#' [`create_shinywc`].
+#'
+#' @param tag The tag name of the HTML tag.
+#' @param params A list containing the component's parameters.
+#' @param params_extra A list containing HTML attributes to add to the tag.
+#' @param attributes A list of attributes the component supports.
+#' @param required A list of required attributes.
+#' @param events A list of events that the component fires.
+#' @param slots A list of slot names the component supports.
+#' @param styles A list of CSS styles the component uses.
+#' @param dependencies A list of HTML dependencies.
+#' @return A Shiny UI tag.
 #' @export
 shinywc_ui <- function(tag, params, params_extra = list(),
                        attributes = list(), required = list(),
@@ -105,7 +121,7 @@ shinywc_ui <- function(tag, params, params_extra = list(),
   )
   full_html <- htmltools::attachDependencies(
     full_html,
-    shinywc::dependency_shinywc()
+    dependency_shinywc()
   )
   if (length(dependencies) > 0) {
     full_html <- htmltools::attachDependencies(

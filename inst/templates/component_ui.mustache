@@ -1,0 +1,79 @@
+#' Create a `<{{name}}>` web component
+#'
+#' Binding to the `<{{name}}>` web component
+#'
+#' @param id ID for the component. If not provided, an ID will be automatically
+#' generated.
+{{#attributes}}
+#' @param {{clean}}{{#required}} (Required){{/required}} TODO
+{{/attributes}}
+#' @param slot Content to place in the default (unnamed) slot.
+{{#slots}}
+#' @param {{clean}} TODO
+{{/slots}}
+{{#cssProperties}}
+#' @param {{clean}} TODO
+{{/cssProperties}}
+#' @param ... Any additional HTML attributes to add to the element tag.
+#' @export
+{{shinywc.clean}} <- function(
+  id = NULL,
+  {{#attributes}}
+  {{clean}} = NULL,
+  {{/attributes}}
+  slot = NULL,
+  {{#slots}}
+  {{clean}} = NULL,
+  {{/slots}}
+  {{#cssProperties}}
+  {{clean}} = NULL,
+  {{/cssProperties}}
+  ...
+) {
+
+  dependencies <- list(__SHINYWC_START_LIST__
+    # Comment/uncomment the following dependencies if you need them
+    {{#shinywc.webcomponentsjs}}{{#shinywc.webcomponentsjs_version}}shinywc::dependency_webcomponentsjs("{{shinywc.webcomponentsjs_version}}"){{/shinywc.webcomponentsjs_version}}{{^shinywc.webcomponentsjs_version}}shinywc::dependency_webcomponentsjs(){{/shinywc.webcomponentsjs_version}}{{/shinywc.webcomponentsjs}}{{^shinywc.webcomponentsjs}}#shinywc::dependency_webcomponentsjs(){{/shinywc.webcomponentsjs}},
+    {{#shinywc.jqueryui}}{{#shinywc.jqueryui_version}}shinywc::dependency_jqueryui("{{shinywc.jqueryui_version}}"){{/shinywc.jqueryui_version}}{{^shinywc.jqueryui_version}}shinywc::dependency_jqueryui(){{/shinywc.jqueryui_version}}{{/shinywc.jqueryui}}{{^shinywc.jqueryui}}#shinywc::dependency_jqueryui(){{/shinywc.jqueryui}},
+
+    # If you need any additional JavaScript/CSS dependencies, add them here
+    # htmltools::htmlDependency(...),
+    {{#shinywc.source_type_js}}
+    htmltools::htmlDependency(
+      name = "{{name}}",
+      version = "{{version}}",
+      src = "webcomponent",
+      package = "{{shinywc.pkgname}}",
+      script = list(src = "{{shinywc.source_file}}", type = "module"),
+    )
+    {{/shinywc.source_type_js}}__SHINYWC_END_LIST__
+  )
+
+  params <- as.list(environment())
+  params_extra <- eval(substitute(alist(...)))
+
+  {{#shinywc.source_type_html}}
+  # workaround for https://github.com/rstudio/htmltools/issues/210
+  shiny::addResourcePath("{{shinywc.pkgname}}", system.file("webcomponent", package = "{{shinywc.pkgname}}"))
+
+  {{/shinywc.source_type_html}}
+  shiny::tagList(
+    shinywc::shinywc_ui(
+      tag = "{{name}}",
+      params = params,
+      params_extra = params_extra,
+      attributes = list({{#attributes}}"{{name}}", {{/attributes}}__SHINYWC_REMOVEME__),
+      required = list({{#attributes}}{{#required}}"{{name}}", {{/required}}{{/attributes}}__SHINYWC_REMOVEME__),
+      events = list({{#events}}"{{name}}", {{/events}}__SHINYWC_REMOVEME__),
+      slots = list({{#slots}}"{{name}}", {{/slots}}__SHINYWC_REMOVEME__),
+      styles = list({{#cssProperties}}"{{name}}", {{/cssProperties}}__SHINYWC_REMOVEME__),
+      dependencies = dependencies
+    )
+    {{#shinywc.source_type_html}}
+    # workaround for https://github.com/rstudio/htmltools/issues/210
+    , htmltools::singleton(htmltools::tags$head(
+      htmltools::tags$link(rel = "import", href = "{{shinywc.pkgname}}/{{shinywc.source_file}}")
+    ))
+    {{/shinywc.source_type_html}}
+  )
+}
